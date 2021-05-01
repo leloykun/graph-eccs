@@ -71,7 +71,7 @@ if num_trees == 1:
   st.sidebar.write("## There is 1 tree of size {}".format(tree_size))
 else:
   st.sidebar.write("## There are {} trees of size {}".format(len(prufer_codes), tree_size))
-st.sidebar.write("## Of which, {} has Bounding Index {}".format(num_trees, tree_size, bi))
+st.sidebar.write("## Of which, {} has Bounding Index {}".format(num_trees, bi))
 
 st.sidebar.write("---")
 
