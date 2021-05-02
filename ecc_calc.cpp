@@ -6,10 +6,12 @@
 #include <algorithm>
 #include <cassert>
 #include <map>
+#include <tuple>
 
 typedef long long ll;
 typedef std::vector<int> vi;
 typedef std::vector<vi> vvi;
+typedef std::tuple<int, std::string, int> isi;
 
 const vi NUM_UNLABELED_TREES = {
   1,1,1,1,2,3,6,11,23,47,106,235,551,1301,3159,
@@ -114,8 +116,7 @@ int main(int argc, char * argv[]) {
     int N_, M; tree_file >> N_ >> M;
     assert(N_ == N);
 
-    ecc_file << N << " " << M << "\n";
-
+    std::vector<isi> encs;
     for (int m = 0; m < M; ++m) {
       vi code(N-2);
       for (int j = 0; j < N-2; ++j)
@@ -133,20 +134,29 @@ int main(int argc, char * argv[]) {
         cnt[e]++;
       }
 
-      ecc_file << cnt.size() << " ";
-      for (auto &[e, c] : cnt) {
-        if (c == 1)
-          ecc_file << e << " ";
-        else
-          ecc_file << e << "x" << c << " ";
-      }
-
+      int BI;
       for (int i = 0; i < N; ++i)
         if (t.ecc[i]*N < ecc_sum) {
-          ecc_file << i << "\n";
+          BI = i;
           break;
         }
+
+      std::string enc = "";
+      for (auto &[e, c] : cnt)
+        if (c == 1)
+          enc += std::to_string(e) + " ";
+        else
+          enc += std::to_string(e) + "x" + std::to_string(c) + " ";
+      enc.pop_back();
+
+      encs.push_back({BI, enc, m});
     }
+
+    std::sort(encs.begin(), encs.end());
+
+    ecc_file << N << " " << M << "\n";
+    for (auto &[bi, enc, i] : encs)
+      ecc_file << bi << " " << enc << " " << i << "\n";
 
     tree_file.close();
     ecc_file.close();

@@ -1,5 +1,6 @@
 ecc_calc
 tree_gen
 tree_expand
+tree_expand_seq_iso
 *.ipynb_checkpoints/
 run.sh
