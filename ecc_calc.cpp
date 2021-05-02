@@ -133,8 +133,12 @@ int main(int argc, char * argv[]) {
         cnt[e]++;
       }
 
+      ecc_file << cnt.size() << " ";
       for (auto &[e, c] : cnt) {
-        ecc_file << e << "x" << c << " ";
+        if (c == 1)
+          ecc_file << e << " ";
+        else
+          ecc_file << e << "x" << c << " ";
       }
 
       for (int i = 0; i < N; ++i)
