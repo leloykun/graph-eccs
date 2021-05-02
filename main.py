@@ -50,8 +50,6 @@ def load_ecc_data(n):
 def load_ecc2data(n):
   prufer_codes_ = load_prufer_codes(n)
   bis_, ecc_seq_, perm_ = load_ecc_data(n)
-  print(len(perm_), len(ecc_seq_), len(prufer_codes_))
-  print(perm_)
 
   bi2data_ = {}
   for i in range(len(perm_)):
@@ -177,6 +175,14 @@ for i in range(sample_idx_from, sample_idx_to+1):
     nx.draw(T, pos=pos, ax=ax, node_color=node_color, with_labels=False)
     if include_label:
         nx.draw_networkx_labels(T, pos=pos, labels=eccs)
+
+    if version == "Eccentricity Sequence Isomorphism":
+        min_ecc = int(seq[0])
+        max_ecc = int(seq[1])
+        seq_ = []
+        for u, v in zip(range(min_ecc, max_ecc+1), seq[2:]):
+            seq_.append(str(u) + "x" + v)
+        seq = seq_
 
     ax.set_title(
         "Prufer Code: [{}]\nAverage Eccentricity: {:.2f}\nEccentricity Sequence: {}".format(

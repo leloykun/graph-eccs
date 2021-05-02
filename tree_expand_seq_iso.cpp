@@ -298,6 +298,7 @@ int main(int argc, char * argv[]) {
       tree t(3);
       t.add_edge(0, 1);
       t.add_edge(1, 2);
+      t.calc_eccs();
       new_trees_prufer = {t.to_prufer()};
       seq_hashes_list = {t.ecc_seq_hash()};
       bounding_index_list = {t.bi};
