@@ -112,8 +112,8 @@ for code in samples:
             if v not in non_leaves + leaves:
                 leaves.append(v)
 
-    print("non leaves: ", non_leaves)
-    print("leaves: ", leaves)
+    #print("non leaves: ", non_leaves)
+    #print("leaves: ", leaves)
 
     if layout == "Kamada Kawai":
         pos = nx.kamada_kawai_layout(T)
