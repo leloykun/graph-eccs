@@ -89,7 +89,7 @@ layout = st.sidebar.selectbox(
     ("Kamada Kawai", "Spring", "Planar", "Shell"),
     index=3
 )
-include_label = st.sidebar.checkbox("Include node label", False)
+include_label = st.sidebar.checkbox("Include node eccentricity", True)
 
 samples = random.choices(bi2prufer_codes[bi], k=num_samples)
 for code in samples:
@@ -115,6 +115,28 @@ for code in samples:
     #print("non leaves: ", non_leaves)
     #print("leaves: ", leaves)
 
+    eccs = nx.eccentricity(T)
+    ecc_sum = 0
+    eccs_list = []
+    node_color = []
+    for u in eccs:
+        eccs_list.append(eccs[u])
+        ecc_sum += eccs[u]
+    for u in eccs:
+        if eccs[u] == min(eccs_list):
+            node_color.append('#009FB7')
+        elif eccs[u]*len(eccs) < ecc_sum:
+            node_color.append('#80A4ED')
+        else:
+            node_color.append('#F63366')
+    eccs_list = sorted(eccs_list, reverse=True)
+    bi_ = -1
+    for i in range(len(eccs_list)):
+        if eccs_list[i]*len(eccs_list) < ecc_sum:
+            bi = i
+            break
+    #print(eccs_list, bi_)
+
     if layout == "Kamada Kawai":
         pos = nx.kamada_kawai_layout(T)
     elif layout == "Spring":
@@ -125,8 +147,16 @@ for code in samples:
         pos = nx.shell_layout(T, nlist=[non_leaves, leaves])
         pos = nx.spring_layout(T, pos=pos, fixed=non_leaves)
 
-    nx.draw(T, pos=pos, ax=ax, with_labels=include_label)
-    ax.set_title("Prufer Code: [{}]".format(" ".join(map(str, code))))
+    nx.draw(T, pos=pos, ax=ax, node_color=node_color, with_labels=False)
+    if include_label:
+        nx.draw_networkx_labels(T, pos=pos, labels=eccs)
+
+    ax.set_title(
+        "Prufer Code: [{}]\nAverage Eccentricity: {:.2f}".format(
+            " ".join(map(str, code)),
+            ecc_sum/tree_size
+        )
+    )
     st.pyplot(fig)
 plt.clf()
     #dot = nx.nx_pydot.to_pydot(g)
